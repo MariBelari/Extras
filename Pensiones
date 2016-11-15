@@ -1,1 +1,64 @@
+require(foreign)
+eness <- read.dbf("//home//sgr//Desktop//SItuación laboral adultos mayores//eness2013_cb_enoe_sdem.dbf")
 
+install.packages("questionr")
+require(questionr)
+ls(estados1)
+estados1 <- subset(eness,eness$ENT == "15" | eness$ENT == "09" ) 
+#wtd.table(estados$P13_1,weights = estados$FAC_ENESS,na.show=TRUE)
+
+estados1$P13_1 <- factor(estados1$P13_1, levels=c(1,2,3,4,5,6,0,9), labels=c("IMSS", "ISSSTE","PEMEX o ISSFAM", "Otra institución","Plan privado","No sabe en que institución", "No cuenta con ninguna","No sabe si cuenta con pensión"))
+P13 <- wtd.table(estados1$P13_1, weights = estados1$FAC_ENESS )
+P13
+
+estados1$P14 <- factor(estados1$P14, levels=c(1,2,3,4,5,6,7,9), labels=c("Retiro o vejez", "Accidente o enfermedad trabajo","Accidente o enfermedad no trabajo", "Jubilación","Viudez","Orfandad", "Fallecimiento de un hijo","No sabe"))
+P14 <- wtd.table(estados1$P14, weights = estados1$FAC_ENESS)
+P14
+
+#ls(estados)
+estados1$P15 <- as.numeric(as.character(estados1$P15))
+
+attach(estados1)
+estados1$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                      ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                             ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                    ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                           ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                                  ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,7))))))
+estados1$P15 <- factor(estados1$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "Igual o mayor a 99 años"))
+P15 <- wtd.table(estados1$P15, weights = estados1$FAC_ENESS)
+P15
+
+class (estados1$P16)
+estados1$P16v5 <- as.character(estados1$P16)
+class (estados1$P16v5)
+estados1$P16v5 <- as.numeric(estados1$P16v5)
+estados1$P16v5
+
+attach(estados1)
+estados1$P16v6[as.numeric(P16v5) == 99999] <- NA
+estados1$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+estados1$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+estados1$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+estados1$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+estados1$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+estados1$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(estados1) 
+estados1$P16v8 <- factor(estados1$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+#estados1$P16v8 <- wtd.table(estados1$P16v5, weights = estados1$FAC_ENESS)
+#estados1$P16v8
+
+install.packages("car")
+require(car)
+help(recode)
+estados1$P16v5<-recode(estados1$P16v5,"99999=NA")
+estados1$P16v5
+
+mean(estados1$P16v5, na.rm = T)
+
+#data.frame (wtd.table (estados1$P16v5, na.show =T))
+
+write.csv(P13,"//home//sgr//Desktop//SItuación laboral adultos mayores//Pensiones.csv")
+write.csv(P14,"//home//sgr//Desktop//SItuación laboral adultos mayores//Pensiones1.csv") 
+write.csv(P15,"//home//sgr//Desktop//SItuación laboral adultos mayores//Pensiones2.csv") 
+write.csv(P16,"//home//sgr//Desktop//SItuación laboral adultos mayores//Pensiones3.csv") 
