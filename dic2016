@@ -13,6 +13,80 @@ ISSSTE <- subset(estados1, estados1$P13_1==2)
 PEMEX <- subset(estados1, estados1$P13_1==3)
 OTRA <- subset(estados1, estados1$P13_1==4)
 PRIVADO <- subset(estados1, estados1$P13_1==5)
+NS <- subset(estados1, estados1$P13_1==6)
+
+attach(IMSS)
+IMSS$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                   ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                          ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                 ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                        ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                               ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
+                                                      ifelse(as.numeric(P15)==99,7,NA)))))))
+IMSS$P15 <- factor(IMSS$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+P15_1 <- wtd.table(IMSS$P15, weights = IMSS$FAC_ENESS)
+P15_1
+
+attach(ISSSTE)
+ISSSTE$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                   ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                          ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                 ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                        ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                               ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
+                                                      ifelse(as.numeric(P15)==99,7,NA)))))))
+ISSSTE$P15 <- factor(ISSSTE$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+P15_2 <- wtd.table(ISSSTE$P15, weights = ISSSTE$FAC_ENESS)
+P15_2
+
+attach(PEMEX)
+PEMEX$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                     ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                            ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                   ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                          ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                                 ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
+                                                        ifelse(as.numeric(P15)==99,7,NA)))))))
+PEMEX$P15  <- factor(PEMEX$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+P15_3 <- wtd.table(PEMEX$P15, weights =  PEMEX$FAC_ENESS)
+P15_3
+
+attach(OTRA)
+OTRA$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                    ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                           ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                  ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                         ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                                ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
+                                                       ifelse(as.numeric(P15)==99,7,NA)))))))
+OTRA$P15  <- factor(OTRA$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+P15_4 <- wtd.table(OTRA$P15, weights =  OTRA$FAC_ENESS)
+P15_4
+
+attach(PRIVADO)
+PRIVADO$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                   ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                          ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                 ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                        ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                               ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
+                                                      ifelse(as.numeric(P15)==99,7,NA)))))))
+PRIVADO$P15  <- factor(PRIVADO$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+P15_5 <- wtd.table(PRIVADO$P15, weights =  PRIVADO$FAC_ENESS)
+P15_5
+
+attach(NS)
+NS$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
+                      ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
+                             ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
+                                    ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
+                                           ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
+                                                  ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
+                                                         ifelse(as.numeric(P15)==99,7,NA)))))))
+NS$P15 <- factor(NS$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+P15_6 <- wtd.table(NS$P15, weights =  NS$FAC_ENESS)
+P15_6
+
 
 estados1$P13_1 <- factor(estados1$P13_1, levels=c(1,2,3,4,5,6,0,9), labels=c("IMSS", "ISSSTE","PEMEX o ISSFAM", "Otra institución","Plan privado","No sabe en que institución", "No cuenta con ninguna","No sabe si cuenta con pensión"))
 P13_1 <- wtd.table(estados1$P13_1, weights = estados1$FAC_ENESS )
@@ -118,4 +192,3 @@ P15_1
 
 institucion <- data.frame(estados1$P13_1, estados1$P15, estados1$FAC_ENESS)
 institucion <- na.omit(institucion)
-
