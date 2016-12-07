@@ -27,6 +27,12 @@ IMSS$P15 <- factor(IMSS$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año"
 P15_1 <- wtd.table(IMSS$P15, weights = IMSS$FAC_ENESS)
 P15_1
 
+#IMSS$P15 <- as.character(P15_1)
+#class(IMSS$P15)
+#IMSS$P15 <- as.numeric(P15_1)
+#class(IMSS$P15)
+#mean(IMSS$P15, na.rm = T)
+
 attach(ISSSTE)
 ISSSTE$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
                    ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
@@ -105,7 +111,7 @@ estados1$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1,
                                      ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
                                             ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
                                                    ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,7))))))
-estados1$P15 <- factor(estados1$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "Igual o mayor a 99 años"))
+estados1$P15 <- factor(estados1$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
 P15 <- wtd.table(estados1$P15, weights = estados1$FAC_ENESS)
 P15
  
@@ -137,8 +143,8 @@ estados1$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
 estados1$P16v6[as.numeric(P16v5) == 10000] <- 6
 detach(estados1) 
 estados1$P16v8 <- factor(estados1$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
-#estados1$P16v8 <- wtd.table(estados1$P16v5, weights = estados1$FAC_ENESS)
-#estados1$P16v8
+P16 <- wtd.table(estados1$P16v8, weights = estados1$FAC_ENESS)
+P16
 
 install.packages("car")
 require(car)
@@ -152,26 +158,6 @@ mean(estados1$P16v5, na.rm = T)
 median(estados1$P16v5, na.rm = T)
 ## 2500
 
-# --------------------------------------- IMSS ----------------------------------------------------------------w
-attach(IMSS)
-IMSS$P15 <- ifelse(as.numeric(P15)>=0 & as.numeric(P15)<1,1, 
-                       ifelse(as.numeric(P15)>=1 & as.numeric(P15)<=4,2, 
-                              ifelse(as.numeric(P15)>=5 & as.numeric(P15)<=9,3, 
-                                     ifelse(as.numeric(P15)>=10 & as.numeric(P15)<=14,4, 
-                                            ifelse(as.numeric(P15)>=15 & as.numeric(P15)<=19,5,
-                                                   ifelse(as.numeric(P15)>=20 & as.numeric(P15)<=98,6,
-                                                          ifelse(as.numeric(P15)==99,7,NA)))))))
-IMSS$P15 <- factor(IMSS$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
-P15_1 <- wtd.table(IMSS$P15, weights = IMSS$FAC_ENESS)
-P15_1
-
-#class(IMSS$P15)
-#IMSS$P15 <- as.character(IMSS$P15)
-#class(IMSS$P15)
-#IMSS$P15 <- as.numeric(IMSS$P15)
-#class(IMSS$P15)
-#mean(IMSS$P15, na.rm = T)
-#-------------------------------------------------------------------------------------------------------------------------------------
 
 
 #write.csv(P13_1,"//home//sgr//Desktop//SItuación laboral adultos mayores//Pensiones.csv")
@@ -181,14 +167,3 @@ P15_1
 
 
 
-
-
-
-
-
-
-
-
-
-institucion <- data.frame(estados1$P13_1, estados1$P15, estados1$FAC_ENESS)
-institucion <- na.omit(institucion)
