@@ -1,0 +1,204 @@
+require(foreign)
+eness<- read.dbf("//home//sgr//Desktop//SItuación laboral adultos mayores//eness2013_cb_enoe_sdem.dbf")
+install.packages("questionr")
+require(questionr)
+estados1 <- subset(eness,eness$ENT == "15" | eness$ENT == "09" ) 
+
+
+IMSS <- subset(estados1, estados1$P13_1==1)
+ISSSTE <- subset(estados1, estados1$P13_1==2)
+PEMEX <- subset(estados1, estados1$P13_1==3)
+OTRA <- subset(estados1, estados1$P13_1==4)
+PRIVADO <- subset(estados1, estados1$P13_1==5)
+NS <- subset(estados1, estados1$P13_1==6)
+
+#------------------AÑOS
+wtd.table(estados1$P15, estados1$P13_1, weights = estados1$FAC_ENESS)
+wtd.table(estados1$P15, weights = estados1$FAC_ENESS)
+
+estados1$P15 <- as.character(estados1$P15)
+attach(estados1)
+estados1$P15 <- ifelse(as.numeric(estados1$P15)>=0 & as.numeric(estados1$P15)<1,1, 
+                       ifelse(as.numeric(estados1$P15)>=1 & as.numeric(estados1$P15)<=4,2, 
+                              ifelse(as.numeric(estados1$P15)>=5 & as.numeric(estados1$P15)<=9,3, 
+                                     ifelse(as.numeric(estados1$P15)>=10 & as.numeric(estados1$P15)<=14,4, 
+                                            ifelse(as.numeric(estados1$P15)>=15 & as.numeric(estados1$P15)<=19,5,
+                                                   ifelse(as.numeric(estados1$P15)>=20 & as.numeric(estados1$P15)<=98,6,7))))))
+estados1$P15 <- factor(estados1$P15, levels=c(1,2,3,4,5,6,7), labels=c("Menos de 1 año", "De 1 a 4 años","De 5 a 9 años", "De 10 a 14 años","De 15 a 19 años","De 20 a 98 años", "No sabe"))
+wtd.table(estados1$P15, weights = estados1$FAC_ENESS)
+
+wtd.table(estados1$P15, weights = estados1$FAC_ENESS)
+
+#----------- MONTO
+class (estados1$P16)
+estados1$P16v5 <- as.character(estados1$P16)
+class (estados1$P16v5)
+estados1$P16v5 <- as.numeric(estados1$P16v5)
+estados1$P16v5
+
+attach(estados1)
+estados1$P16v6[as.numeric(P16v5) == 99999] <- NA
+estados1$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+estados1$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+estados1$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+estados1$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+estados1$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+estados1$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(estados1) 
+estados1$P16v8 <- factor(estados1$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(estados1$P16v8, estados1$P13_1, weights = estados1$FAC_ENESS)
+
+install.packages("car")
+require(car)
+estados1$P16v5<-recode(estados1$P16v5,"99999=NA")
+estados1$P16v5
+mean(estados1$P16v5, na.rm = T)
+median(estados1$P16v5, na.rm = T)
+
+#------------------IMSS
+class (IMSS$P16)
+IMSS$P16v5 <- as.character(IMSS$P16)
+class (IMSS$P16v5)
+IMSS$P16v5 <- as.numeric(IMSS$P16v5)
+IMSS$P16v5
+
+attach(IMSS)
+IMSS$P16v6[as.numeric(P16v5) == 99999] <- NA
+IMSS$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+IMSS$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+IMSS$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+IMSS$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+IMSS$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+IMSS$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(IMSS) 
+IMSS$P16v8 <- factor(IMSS$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(IMSS$P16v8, IMSS$P13_1, weights = IMSS$FAC_ENESS)
+
+IMSS$P16v5<-recode(IMSS$P16v5,"99999=NA")
+IMSS$P16v5
+mean(IMSS$P16v5, na.rm = T)
+median(IMSS$P16v5, na.rm = T)
+
+
+#------------------ISSSTE
+class (ISSSTE$P16)
+ISSSTE$P16v5 <- as.character(ISSSTE$P16)
+class (ISSSTE$P16v5)
+ISSSTE$P16v5 <- as.numeric(ISSSTE$P16v5)
+ISSSTE$P16v5
+
+attach(ISSSTE)
+ISSSTE$P16v6[as.numeric(P16v5) == 99999] <- NA
+ISSSTE$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+ISSSTE$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+ISSSTE$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+ISSSTE$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+ISSSTE$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+ISSSTE$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(ISSSTE) 
+ISSSTE$P16v8 <- factor(ISSSTE$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(ISSSTE$P16v8, ISSSTE$P13_1, weights = ISSSTE$FAC_ENESS)
+
+ISSSTE$P16v5<-recode(ISSSTE$P16v5,"99999=NA")
+ISSSTE$P16v5
+mean(ISSSTE$P16v5, na.rm = T)
+median(ISSSTE$P16v5, na.rm = T)
+
+#------------------PEMEX
+class (PEMEX$P16)
+PEMEX$P16v5 <- as.character(PEMEX$P16)
+class (PEMEX$P16v5)
+PEMEX$P16v5 <- as.numeric(PEMEX$P16v5)
+PEMEX$P16v5
+
+attach(PEMEX)
+PEMEX$P16v6[as.numeric(P16v5) == 99999] <- NA
+PEMEX$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+PEMEX$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+PEMEX$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+PEMEX$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+PEMEX$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+PEMEX$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(PEMEX) 
+PEMEX$P16v8 <- factor(PEMEX$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(PEMEX$P16v8, PEMEX$P13_1, weights = PEMEX$FAC_ENESS)
+
+PEMEX$P16v5<-recode(PEMEX$P16v5,"99999=NA")
+PEMEX$P16v5
+mean(PEMEX$P16v5, na.rm = T)
+median(PEMEX$P16v5, na.rm = T)
+
+
+#------------------OTRA INSTUTUCION
+class (OTRA$P16)
+OTRA$P16v5 <- as.character(OTRA$P16)
+class (OTRA$P16v5)
+OTRA$P16v5 <- as.numeric(OTRA$P16v5)
+OTRA$P16v5
+
+attach(OTRA)
+OTRA$P16v6[as.numeric(P16v5) == 99999] <- NA
+OTRA$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+OTRA$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+OTRA$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+OTRA$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+OTRA$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+OTRA$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(OTRA) 
+OTRA$P16v8 <- factor(OTRA$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(OTRA$P16v8, OTRA$P13_1, weights = OTRA$FAC_ENESS)
+
+OTRA$P16v5<-recode(OTRA$P16v5,"99999=NA")
+OTRA$P16v5
+mean(OTRA$P16v5, na.rm = T)
+median(OTRA$P16v5, na.rm = T)
+
+
+#------------------PLAN PRIVADO
+class (PRIVADO$P16)
+PRIVADO$P16v5 <- as.character(PRIVADO$P16)
+class (PRIVADO$P16v5)
+PRIVADO$P16v5 <- as.numeric(PRIVADO$P16v5)
+PRIVADO$P16v5
+
+attach(PRIVADO)
+PRIVADO$P16v6[as.numeric(P16v5) == 99999] <- NA
+PRIVADO$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+PRIVADO$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+PRIVADO$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+PRIVADO$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+PRIVADO$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+PRIVADO$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(PRIVADO) 
+PRIVADO$P16v8 <- factor(PRIVADO$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(PRIVADO$P16v8, PRIVADO$P13_1, weights = PRIVADO$FAC_ENESS)
+
+PRIVADO$P16v5<-recode(PRIVADO$P16v5,"99999=NA")
+PRIVADO$P16v5
+mean(PRIVADO$P16v5, na.rm = T)
+median(PRIVADO$P16v5, na.rm = T)
+
+
+#------------------NO SABE EN QUE INSTITUCION
+class (NS$P16)
+NS$P16v5 <- as.character(NS$P16)
+class (NS$P16v5)
+NS$P16v5 <- as.numeric(NS$P16v5)
+NS$P16v5
+
+attach(NS)
+NS$P16v6[as.numeric(P16v5) == 99999] <- NA
+NS$P16v6[as.numeric(P16v5) > 0 & as.numeric(P16v5)<1000] <- 1
+NS$P16v6[as.numeric(P16v5) >= 1000 & as.numeric(P16v5)<2000] <- 2
+NS$P16v6[as.numeric(P16v5) >= 2000 & as.numeric(P16v5)<3000] <- 3
+NS$P16v6[as.numeric(P16v5) >= 3000 & as.numeric(P16v5)<5000] <- 4
+NS$P16v6[as.numeric(P16v5) >= 5000 & as.numeric(P16v5)<10000] <- 5
+NS$P16v6[as.numeric(P16v5) == 10000] <- 6
+detach(NS) 
+NS$P16v8 <- factor(NS$P16v6, levels=c(1,2,3,4,5,6), labels=c("Menos de 1000 pesos", "De 1000 a 1999 pesos", "De 2000 a 2999 pesos", "De 3000 a 4999 pesos", "De 5000 a 9999 pesos", "10000 pesos"))
+wtd.table(NS$P16v8, NS$P13_1, weights = NS$FAC_ENESS)
+
+NS$P16v5<-recode(NS$P16v5,"99999=NA")
+NS$P16v5
+mean(NS$P16v5, na.rm = T)
+median(NS$P16v5, na.rm = T)
